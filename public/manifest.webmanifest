@@ -1,0 +1,23 @@
+{
+  "name": "La Birria POS",
+  "short_name": "Birria POS",
+  "description": "Cashier and admin point-of-sale system for La Birria.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#c94728",
+  "theme_color": "#c94728",
+  "icons": [
+    {
+      "src": "/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
