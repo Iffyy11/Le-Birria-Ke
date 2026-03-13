@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>La Birria POS</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <section class="auth-screen" id="authScreen">
+      <article class="auth-card">
+        <p class="brand-kicker">Authentic Birria Tacos and More</p>
+        <h1>LA BIRRIA LOGIN</h1>
+        <label>
+          Role
+          <select id="roleSelect">
+            <option value="cashier">Cashier</option>
+            <option value="admin">Admin</option>
+          </select>
+        </label>
+
+        <label id="adminUsernameWrap">
+          Username
+          <input id="loginUsername" type="text" placeholder="Enter username" />
+        </label>
+
+        <label id="adminPasswordWrap">
+          Password
+          <input id="loginPassword" type="password" placeholder="Enter password" />
+        </label>
+
+        <label id="cashierPinWrap">
+          Cashier PIN
+          <input id="cashierPin" type="password" inputmode="numeric" maxlength="6" placeholder="Enter PIN" />
+        </label>
+
+        <button id="loginBtn" class="primary-btn">Login</button>
+        <p class="auth-error" id="authError"></p>
+      </article>
+    </section>
+
+    <div class="app-shell hidden" id="appShell">
+      <header class="topbar">
+        <div class="brand-left">
+          <p class="brand-kicker">Authentic Birria Tacos and More</p>
+          <h1>LA BIRRIA POS</h1>
+          <p class="brand-sub">Fast cashier + direct receipt printing</p>
+        </div>
+        <div class="brand-right">
+          <div class="status-pill" id="userRoleBadge">Role</div>
+          <div class="clock" id="liveClock">--:--:--</div>
+          <button id="logoutBtn" class="ghost-btn">Logout</button>
+        </div>
+      </header>
+
+      <main class="layout-grid" id="layoutGrid">
+        <section class="panel menu-panel">
+          <div class="panel-head">
+            <h2>Birria Menu</h2>
+            <input id="menuSearch" type="text" placeholder="Search tacos, nachos, drinks..." />
+          </div>
+          <div class="menu-categories" id="categoryTabs"></div>
+          <div id="menuGrid" class="menu-grid"></div>
+        </section>
+
+        <section class="panel cart-panel">
+          <div class="panel-head">
+            <h2>Current Order</h2>
+            <button id="clearCartBtn" class="ghost-btn">Clear</button>
+          </div>
+
+          <div class="form-grid">
+            <label>
+              Customer
+              <input id="customerName" type="text" placeholder="Walk-in Guest" />
+            </label>
+            <label>
+              Payment
+              <select id="paymentMethod">
+                <option value="cash">Cash</option>
+                <option value="card">Card</option>
+                <option value="mpesa">M-Pesa</option>
+              </select>
+            </label>
+          </div>
+
+          <label>
+            Notes
+            <textarea id="orderNotes" rows="2" placeholder="No onions, extra spicy, etc."></textarea>
+          </label>
+
+          <div class="cart-lines" id="cartLines"></div>
+
+          <div class="totals-box">
+            <div><span>Subtotal</span><strong id="subtotalValue">KES 0</strong></div>
+            <div><span>Tax (16%)</span><strong id="taxValue">KES 0</strong></div>
+            <div class="grand"><span>Total</span><strong id="totalValue">KES 0</strong></div>
+          </div>
+
+          <div class="cash-row" id="cashRow">
+            <label>
+              Amount Received
+              <input id="amountReceived" type="number" min="0" step="50" placeholder="0" />
+            </label>
+            <div class="change-box">
+              Change Due
+              <strong id="changeDue">KES 0</strong>
+            </div>
+          </div>
+
+          <div class="cash-row" id="mpesaRow">
+            <label>
+              M-Pesa Phone
+              <input id="mpesaPhone" type="tel" placeholder="07XXXXXXXX" />
+            </label>
+            <label>
+              M-Pesa Code
+              <input id="mpesaCode" type="text" placeholder="e.g. RGH7TR89" />
+            </label>
+          </div>
+
+          <button id="checkoutBtn" class="primary-btn">Place Order</button>
+        </section>
+
+        <section class="panel admin-panel" id="adminPanel">
+          <div class="panel-head">
+            <h2>Admin Panel</h2>
+            <div class="admin-head-actions">
+              <button id="exportSalesBtn" class="ghost-btn">Export Sales</button>
+              <button id="clearOrdersBtn" class="ghost-btn">Clear Sales</button>
+            </div>
+          </div>
+
+          <div class="totals-box summary-box">
+            <div><span>Orders In View</span><strong id="ordersCount">0</strong></div>
+            <div><span>Sales In View</span><strong id="salesDoneValue">KES 0</strong></div>
+            <div><span>Cash</span><strong id="cashValue">KES 0</strong></div>
+            <div><span>Card</span><strong id="cardValue">KES 0</strong></div>
+            <div><span>M-Pesa</span><strong id="mpesaValue">KES 0</strong></div>
+          </div>
+
+          <div class="insights-grid">
+            <article class="insight-card">
+              <span>Average Ticket</span>
+              <strong id="averageSaleValue">KES 0</strong>
+            </article>
+            <article class="insight-card">
+              <span>Top Item</span>
+              <strong id="topItemValue">No sales yet</strong>
+            </article>
+            <article class="insight-card">
+              <span>Top Cashier</span>
+              <strong id="topCashierValue">No sales yet</strong>
+            </article>
+            <article class="insight-card">
+              <span>Last Sale</span>
+              <strong id="lastSaleValue">No sales yet</strong>
+            </article>
+          </div>
+
+          <div class="admin-tabs">
+            <button class="tab-btn active" data-admin-tab="sales">Sales</button>
+            <button class="tab-btn" data-admin-tab="menu">Menu</button>
+            <button class="tab-btn" data-admin-tab="settings">Settings</button>
+          </div>
+
+          <section class="admin-tab-content" id="salesTab">
+            <h3 class="section-title">Sales Done</h3>
+            <div class="sales-toolbar">
+              <input id="salesSearchInput" type="text" placeholder="Search by order, customer or cashier" />
+              <select id="salesPeriodFilter">
+                <option value="all">All Time</option>
+                <option value="today">Today</option>
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+              </select>
+              <select id="salesPaymentFilter">
+                <option value="all">All Payments</option>
+                <option value="cash">Cash</option>
+                <option value="card">Card</option>
+                <option value="mpesa">M-Pesa</option>
+              </select>
+              <select id="salesCashierFilter">
+                <option value="all">All Cashiers</option>
+              </select>
+            </div>
+            <div class="orders-list" id="ordersList"></div>
+          </section>
+
+          <section class="admin-tab-content hidden" id="menuTab">
+            <h3 class="section-title">Menu Management</h3>
+            <div class="form-grid menu-form-grid">
+              <label>
+                Item Name
+                <input id="menuNameInput" type="text" placeholder="e.g. Birria Torta" />
+              </label>
+              <label>
+                Category
+                <input id="menuCategoryInput" type="text" placeholder="e.g. Specials" />
+              </label>
+            </div>
+            <label>
+              Description
+              <textarea id="menuDescriptionInput" rows="2" placeholder="Short item description"></textarea>
+            </label>
+            <label>
+              Price (KES)
+              <input id="menuPriceInput" type="number" min="0" step="10" placeholder="0" />
+            </label>
+            <label class="inline-check">
+              <input id="menuAvailableInput" type="checkbox" checked />
+              Available to cashier
+            </label>
+            <div class="menu-form-actions">
+              <button id="saveMenuBtn" class="primary-btn">Add Menu Item</button>
+              <button id="cancelMenuEditBtn" class="ghost-btn hidden">Cancel Edit</button>
+            </div>
+            <p class="auth-error" id="menuMessage"></p>
+            <div class="orders-list" id="menuManageList"></div>
+          </section>
+
+          <section class="admin-tab-content hidden" id="settingsTab">
+            <h3 class="section-title">Admin Settings</h3>
+            <label>
+              Current Admin Password
+              <input id="currentAdminPassword" type="password" placeholder="Current password" />
+            </label>
+            <label>
+              New Admin Password
+              <input id="newAdminPassword" type="password" placeholder="New password" />
+            </label>
+            <label>
+              Confirm New Password
+              <input id="confirmAdminPassword" type="password" placeholder="Confirm new password" />
+            </label>
+            <button id="changeAdminPasswordBtn" class="primary-btn">Change Admin Password</button>
+
+            <h3 class="section-title">Add Cashier</h3>
+            <label>
+              Cashier Name
+              <input id="newCashierName" type="text" placeholder="Cashier name" />
+            </label>
+            <label>
+              Cashier PIN (4-6 digits)
+              <input id="newCashierPin" type="password" inputmode="numeric" maxlength="6" placeholder="PIN" />
+            </label>
+            <div class="menu-form-actions">
+              <button id="addCashierBtn" class="primary-btn">Add Cashier</button>
+              <button id="cancelCashierEditBtn" class="ghost-btn hidden">Cancel Edit</button>
+            </div>
+            <div class="orders-list" id="cashiersList"></div>
+            <p class="auth-error" id="settingsMessage"></p>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <template id="menuCardTemplate">
+      <article class="menu-card">
+        <div class="menu-card-image"></div>
+        <div class="menu-card-content">
+          <h3></h3>
+          <p class="description"></p>
+          <div class="card-footer">
+            <span class="price"></span>
+            <button class="add-btn">Add</button>
+          </div>
+        </div>
+      </article>
+    </template>
+
+    <template id="cartLineTemplate">
+      <article class="cart-line">
+        <div>
+          <h4></h4>
+          <p class="line-meta"></p>
+        </div>
+        <div class="line-controls">
+          <button class="minus">−</button>
+          <span class="qty">1</span>
+          <button class="plus">+</button>
+          <strong class="line-total"></strong>
+          <button class="remove">×</button>
+        </div>
+      </article>
+    </template>
+
+    <section class="print-receipt" id="printReceipt"></section>
+    <script src="app.js"></script>
+  </body>
+</html>
