@@ -522,8 +522,8 @@ function removeLine(id) {
 
 function calculateTotals() {
   const subtotal = cart.reduce((sum, line) => sum + line.qty * line.price, 0);
-  const tax = subtotal * TAX_RATE;
-  const total = subtotal + tax;
+  const total = subtotal;
+  const tax = total * (TAX_RATE / (1 + TAX_RATE));
 
   return {
     subtotal,
@@ -1130,8 +1130,8 @@ function renderPrintReceipt(order) {
         .map((item) => `<p>${item.qty} x ${item.name} <span>${formatKes(item.total)}</span></p>`)
         .join("")}
       <hr />
-      <p>Subtotal <span>${formatKes(order.subtotal)}</span></p>
-      <p>Tax <span>${formatKes(order.tax)}</span></p>
+      <p>Subtotal (Tax Included) <span>${formatKes(order.subtotal)}</span></p>
+      <p>Tax Included (16%) <span>${formatKes(order.tax)}</span></p>
       <p><strong>Total</strong> <strong>${formatKes(order.total)}</strong></p>
       <p>Payment: ${order.paymentMethod.toUpperCase()}</p>
       ${order.paymentMethod === "mpesa" ? `<p>M-Pesa: ${order.mpesaCode}</p>` : ""}
