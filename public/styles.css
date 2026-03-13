@@ -533,6 +533,11 @@ label {
     margin: 4mm;
   }
 
+  * {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
   body * {
     visibility: hidden;
   }

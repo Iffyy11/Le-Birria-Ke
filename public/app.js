@@ -634,6 +634,10 @@ function submitOrder() {
   renderCart();
 
   setTimeout(() => {
+    window.onafterprint = () => {
+      refs.printReceipt.innerHTML = "";
+      window.onafterprint = null;
+    };
     window.print();
   }, 100);
 }
@@ -727,6 +731,10 @@ function printSavedOrder(orderId) {
 
   renderPrintReceipt(order);
   setTimeout(() => {
+    window.onafterprint = () => {
+      refs.printReceipt.innerHTML = "";
+      window.onafterprint = null;
+    };
     window.print();
   }, 100);
 }
